@@ -1,0 +1,30 @@
+doctype html
+html
+    head
+        title Quick Sale Savers - All Products
+        link(rel="stylesheet" href="/styles.css")
+
+    body
+        .container
+            h1 All Products
+
+            table
+                thead
+                    tr
+                        th S.No
+                        th Product Name
+                        th Category
+                        th Original Price
+                        th Discount Price
+                        th Expiration Date
+                        th Quantity Available
+                tbody
+                    each product in data
+                        tr
+                            td= product.product_id
+                            td= product.product_name
+                            td= product.category
+                            td= "£" + parseFloat(product.original_price).toFixed(2)
+                            td= "£" + parseFloat(product.discount_price).toFixed(2)
+                            td= product.expiration_date
+                            td= product.quantity
