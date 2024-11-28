@@ -1,0 +1,25 @@
+doctype html
+html
+    head
+        title Quick Sale Savers - Signup
+        link(rel="stylesheet" href="/styles.css")
+    body
+        include navbar.pug
+        .container
+            h1 Create an Account
+            form(action="/signup" method="POST")
+                .form-group
+                    label(for="name") Full Name
+                    input#name(type="text" name="name" placeholder="Enter your full name" required)
+                .form-group
+                    label(for="email") Email
+                    input#email(type="email" name="email" placeholder="Enter your email" required)
+                .form-group
+                    label(for="password") Password
+                    input#password(type="password" name="password" placeholder="Create a password" required)
+                .form-group
+                    label(for="confirm-password") Confirm Password
+                    input#confirm-password(type="password" name="confirm_password" placeholder="Re-enter your password" required)
+                button(type="submit") Sign Up
+            p Already have an account? 
+                a(href="/login") Login here
