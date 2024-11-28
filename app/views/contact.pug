@@ -1,0 +1,21 @@
+doctype html
+html
+    head
+        title Quick Sale Savers - Contact Us
+        link(rel="stylesheet" href="/styles.css")
+    body
+        include navbar
+        .container
+            h1 Contact Us
+            p Have questions? We’d love to hear from you!
+            form(action="/contact" method="POST")
+                .form-group
+                    label(for="name") Name
+                    input#name(type="text" name="name" required)
+                .form-group
+                    label(for="email") Email
+                    input#email(type="email" name="email" required)
+                .form-group
+                    label(for="message") Message
+                    textarea#message(name="message" rows="5" required)
+                button(type="submit") Send Message
