@@ -1,0 +1,31 @@
+doctype html
+html
+    head
+        title= `Product Details - ${product.product_name}`
+        link(rel="stylesheet" href="/styles.css")
+    body
+        include navbar_copy
+        .container
+            h1 Product Details
+
+            .details
+                p
+                    strong Product Name: 
+                    | #{product.product_name}
+                p
+                    strong Category: 
+                    | #{product.category}
+                p
+                    strong Original Price: 
+                    | £#{parseFloat(product.original_price).toFixed(2)}
+                p
+                    strong Discount Price: 
+                    | £#{parseFloat(product.discount_price).toFixed(2)}
+                p
+                    strong Expiration Date: 
+                    | #{product.expiration_date}
+                p
+                    strong Quantity Available: 
+                    | #{product.quantity}
+
+            a(href="/products" class="back-btn") Back to All Products

@@ -3,8 +3,8 @@ html
     head
         title Quick Sale Savers - All Products
         link(rel="stylesheet" href="/styles.css")
-
     body
+        include navbar
         .container
             h1 All Products
 
@@ -20,7 +20,7 @@ html
                         th Quantity Available
                 tbody
                     each product in data
-                        tr
+                        tr(data-id=product.product_id class="product-row")
                             td= product.product_id
                             td= product.product_name
                             td= product.category
@@ -28,3 +28,11 @@ html
                             td= "£" + parseFloat(product.discount_price).toFixed(2)
                             td= product.expiration_date
                             td= product.quantity
+
+        script.
+            document.querySelectorAll(".product-row").forEach(row => {
+                row.addEventListener("click", () => {
+                    const productId = row.getAttribute("data-id");
+                    window.location.href = `/product/${productId}`;
+                });
+            });

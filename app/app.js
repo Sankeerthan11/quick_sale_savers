@@ -18,7 +18,7 @@ app.set('views', './app/views');
 // });
 
 // Task 2 display a formatted list of products
-app.get("/", function(req, res) {
+app.get("/products", function(req, res) {
     var sql = 'select * from products';
     db.query(sql).then(results => {
     	    // Send the results rows to the all-products template
@@ -35,12 +35,46 @@ app.get("/db_test", function(req, res) {
         res.send(results)
     });
 });
+app.get("/product/:id", function (req, res) {
+    const productId = req.params.id;
+    const sql = 'SELECT * FROM products WHERE product_id = ?';
+    db.query(sql, [productId])
+        .then(results => {
+            if (results.length > 0) {
+                res.render('product-details', { product: results[0] });
+            } else {
+                res.status(404).send('Product not found');
+            }
+        })
+});
+
 
 // Create a route for /goodbye
 // Responds to a 'GET' request
 app.get("/goodbye", function(req, res) {
     res.send("Goodbye world!");
 });
+
+app.get("/login", function(req, res) {
+    res.render("login");
+});
+app.get("/signup", function(req, res) {
+    res.render("signup");
+});
+// Responds to a 'GET' request
+app.get("/about", function(req, res) {
+    res.render("about");
+});
+
+// Responds to a 'GET' request
+app.get("/contact", function(req, res) {
+    res.render("contact");
+});
+// Responds to a 'GET' request
+app.get("/", function(req, res) {
+    res.render("home");
+});
+
 
 // Create a dynamic route for /hello/<name>, where name is any value provided by user
 // At the end of the URL

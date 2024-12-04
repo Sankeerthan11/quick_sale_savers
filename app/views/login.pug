@@ -1,0 +1,19 @@
+doctype html
+html
+    head
+        title Quick Sale Savers - Login
+        link(rel="stylesheet" href="/styles.css")
+    body
+        include navbar.pug
+        .container
+            h1 Login to Your Account
+            form(action="/login" method="POST")
+                .form-group
+                    label(for="email") Email
+                    input#email(type="email" name="email" placeholder="Enter your email" required)
+                .form-group
+                    label(for="password") Password
+                    input#password(type="password" name="password" placeholder="Enter your password" required)
+                button(type="submit") Login
+            p Don't have an account? 
+                a(href="/signup") Sign up here
