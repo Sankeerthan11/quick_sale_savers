@@ -1,0 +1,47 @@
+doctype html
+html
+    head
+        title Quick Sale Savers - All Products
+        link(rel="stylesheet" href="/styles.css")
+    body
+        include navbar
+        .container
+            h1 All Products
+
+            // Add Create Product Button
+            a.button(href="/createproduct") Create New Product
+
+            table
+                thead
+                    tr
+                        th S.No
+                        th Product Name
+                        th Category
+                        th Original Price
+                        th Discount Price
+                        th Expiration Date
+                        th Quantity Available
+                        th Actions
+                tbody
+                    each product, index in data
+                        tr(data-id=product.product_id class="product-row")
+                            td= index + 1
+                            td= product.product_name
+                            td= product.category
+                            td= "£" + parseFloat(product.original_price).toFixed(2)
+                            td= "£" + parseFloat(product.discount_price).toFixed(2)
+                            td= new Date(product.expiration_date).toLocaleDateString('en-GB')
+                            td= product.quantity
+                            td
+                                // Action Buttons
+                                a.button(href=`/product/edit/${product.product_id}`) Edit
+                                a.button(href=`/product/delete/${product.product_id}` style="background-color: red; color: white;") Delete
+
+        script.
+            // Clickable row for product details
+            document.querySelectorAll(".product-row").forEach(row => {
+                row.addEventListener("click", () => {
+                    const productId = row.getAttribute("data-id");
+                    window.location.href = `/product/${productId}`;
+                });
+            });

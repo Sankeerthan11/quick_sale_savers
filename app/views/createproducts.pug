@@ -1,0 +1,43 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title Create Product
+    link(rel="stylesheet" href="./createproducts.css")
+  body
+    .container
+      h1 Create a New Product
+
+      form(action="/create-product" method="POST")
+        .form-group
+          label(for="product_name") Product Name
+          input(type="text" id="product_name" name="product_name" placeholder="Enter product name" required)
+
+        .form-group
+          label(for="category") Category
+          input(type="text" id="category" name="category" placeholder="Enter product category" required)
+
+        .form-group
+          label(for="original_price") Original Price
+          input(type="number" id="original_price" name="original_price" step="0.01" placeholder="Enter original price" required)
+
+        .form-group
+          label(for="discount_price") Discount Price
+          input(type="number" id="discount_price" name="discount_price" step="0.01" placeholder="Enter discount price" required)
+
+        .form-group
+          label(for="expiration_date") Expiration Date
+          input(type="date" id="expiration_date" name="expiration_date" required)
+
+        .form-group
+          label(for="quantity") Quantity
+          input(type="number" id="quantity" name="quantity" min="1" placeholder="Enter product quantity" required)
+
+        .form-group
+          label(for="retailer_id") Retailer ID
+          input(type="number" id="retailer_id" name="retailer_id" placeholder="Enter retailer ID" required)
+
+        button(type="submit") Submit
+
+      a.button(href="/") Back to Home

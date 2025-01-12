@@ -67,6 +67,9 @@ app.get('/logout',(req,res) => {
     res.redirect('/');
 });
 
+app.get("/createproduct", function(req, res) {
+    res.render("createproducts");
+});
 // Task 2 display a formatted list of products
 app.get("/products", function(req, res) {
     var sql = 'select * from products';
@@ -76,6 +79,16 @@ app.get("/products", function(req, res) {
         res.render('all-products', {data: results});
     });
 });
+// Task 2 display a formatted list of products
+app.get("/admin-dashboard", function(req, res) {
+    var sql = 'select * from products';
+    db.query(sql).then(results => {
+    	    // Send the results rows to the all-products template
+    	    // The rows will be in a variable called data
+        res.render('admin-dashboard', {data: results});
+    });
+});
+
 // Create a route for testing the db
 app.get("/db_test", function(req, res) {
     // Assumes a table called test_table exists in your database
@@ -163,6 +176,23 @@ app.post('/authenticate', async function (req, res) {
         console.error(`Error while comparing `, err.message);
     }
 });
+
+app.post('/products', async (req, res) => {
+    const { product_name, category, original_price, discount_price, expiration_date, quantity, retailer_id } = req.body;
+
+    try {
+        const sql = 'INSERT INTO products (product_name, category, original_price, discount_price, expiration_date, quantity, retailer_id) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        const values = [product_name, category, original_price, discount_price, expiration_date, quantity, retailer_id];
+        
+        await db.query(sql, values);
+        res.render('product-success', { message: 'Product created successfully' });
+    } catch (error) {
+        console.error('Error creating product:', error.message);
+        res.render('error', { error: 'Failed to create product' });
+    }
+});
+
+
 
 // create User api
 app.post('/signup1', async (req, res) => {
