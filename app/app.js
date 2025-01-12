@@ -165,7 +165,7 @@ app.post('/authenticate', async function (req, res) {
                 req.session.uid = uId;
                 req.session.loggedIn = true;
                 console.log(req.session.id);
-                res.redirect('/products');
+                res.redirect('/admin-dashboard');
             } else {
                 res.render('login', { errorMessage: 'Invalid password' });
             }
