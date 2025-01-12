@@ -3,6 +3,10 @@ const express = require("express");
 
 // Create express app
 var app = express();
+const cookieParser = require("cookie-parser");
+const sessions = require('express-session');
+const { User } = require("./models/user");
+const bcrypt = require('bcryptjs');
 
 // Add static files location
 app.use(express.static("static"));
@@ -16,6 +20,52 @@ app.set('views', './app/views');
 // app.get("/", function(req, res) {
 //     res.send("Hello world!");
 // });
+// parsing the incoming data
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+//serving public file
+app.use(express.static(__dirname));
+// cookie parser middleware
+app.use(cookieParser());
+// creating 24 hours from milliseconds
+const oneDay = 1000 * 60 * 60 * 24;
+
+//session middleware
+app.use(sessions({
+    secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
+    saveUninitialized:true,
+    cookie: { maxAge: oneDay },
+    resave: false
+}));
+
+// Create a route for root - /
+app.get("/", function(req, res) {
+    console.log(req.session);
+    if (req.session.uid) {
+		res.send('Welcome back, ' + req.session.uid + '!');
+	} else {
+		res.render("login");
+	}
+	res.end();
+});
+
+app.post('/user',(req,res) => {
+    if(req.body.username == myusername && req.body.password == mypassword){
+        session=req.session;
+        session.userid=req.body.username;
+        console.log(req.session)
+        res.send(`Hey there, welcome <a href=\'/logout'>click to logout</a>`);
+    }
+    else{
+        res.send('Invalid username or password');
+    }
+})
+
+app.get('/logout',(req,res) => {
+    req.session.destroy();
+    res.redirect('/');
+});
 
 // Task 2 display a formatted list of products
 app.get("/products", function(req, res) {
@@ -71,8 +121,74 @@ app.get("/contact", function(req, res) {
     res.render("contact");
 });
 // Responds to a 'GET' request
-app.get("/", function(req, res) {
+app.get("/home", function(req, res) {
     res.render("home");
+});
+
+// profile route
+app.get('/profile', async function (req, res) {
+    const userId = req.session.uid;
+    const sql = 'SELECT * FROM Users WHERE id = ?';
+    try {
+        const user = await db.query(sql, [userId]);
+        // Assuming that user[0] contains the user data, adjust accordingly if needed
+        res.render('profile', { data: user });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+// Check submitted email and password pair
+app.post('/authenticate', async function (req, res) {
+    const params = req.body; // Declare as const
+    const user = new User(params.email);
+    
+    try {
+        const uId = await user.getIdFromEmail();
+        if (uId) {
+            const match = await user.authenticate(params.password);
+            console.log(match);
+            if (match) {
+                req.session.uid = uId;
+                req.session.loggedIn = true;
+                console.log(req.session.id);
+                res.redirect('/products');
+            } else {
+                res.render('login', { errorMessage: 'Invalid password' });
+            }
+        } else {
+            res.send('Invalid email');
+        }
+    } catch (err) {
+        console.error(`Error while comparing `, err.message);
+    }
+});
+
+// create User api
+app.post('/signup1', async (req, res) => {
+    const { email, password} = req.body;
+
+    try {
+        // Hash the password using bcrypt
+        const hashedPassword = await bcrypt.hash(password, 10);
+        
+        // Prepare SQL query
+        const sql = 'INSERT INTO Users(email, password) VALUES (?, ?)';
+        const values = [email, hashedPassword];
+        // Execute SQL query
+        await db.query(sql, values);
+
+        res.render('signup', { success: 'registration successful' });
+    } catch (error) {
+        console.log(error)
+        res.render('signup', { error: 'error' });
+    }
+});
+
+// Logout
+app.get('/logout', function (req, res) {
+    req.session.destroy();
+    res.redirect('/login');
 });
 
 

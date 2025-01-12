@@ -7,7 +7,7 @@ html
         include navbar.pug
         .container
             h1 Login to Your Account
-            form(action="/login" method="POST")
+            form(action="/authenticate" method="POST")
                 .form-group
                     label(for="email") Email
                     input#email(type="email" name="email" placeholder="Enter your email" required)
