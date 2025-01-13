@@ -1,0 +1,43 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title Update Product
+    link(rel="stylesheet" href="../../createproducts.css")
+  body
+    .container
+      h1 Update Product Details
+
+      //- The form action sends data to the update-product endpoint with a POST request
+      form(action=`/update-product/${product.product_id}` method="POST")
+        .form-group
+          label(for="product_name") Product Name
+          input(type="text" id="product_name" name="product_name" placeholder="Enter product name" required value=product.product_name)
+
+        .form-group
+          label(for="category") Category
+          input(type="text" id="category" name="category" placeholder="Enter product category" required value=product.category)
+
+        .form-group
+          label(for="original_price") Original Price
+          input(type="number" id="original_price" name="original_price" step="0.01" placeholder="Enter original price" required value=product.original_price)
+
+        .form-group
+          label(for="discount_price") Discount Price
+          input(type="number" id="discount_price" name="discount_price" step="0.01" placeholder="Enter discount price" required value=product.discount_price)
+
+        .form-group
+          label(for="expiration_date") Expiration Date
+          input(type="date" id="expiration_date" name="expiration_date" required value=product.expiration_date)
+
+        .form-group
+          label(for="quantity") Quantity
+          input(type="number" id="quantity" name="quantity" min="1" placeholder="Enter product quantity" required value=product.quantity)
+
+        //- Hidden field for retailer_id
+        input(type="hidden" id="retailer_id" name="retailer_id" value=product.retailer_id)
+
+        button(type="submit") Update Product
+
+      a.button(href="/admin-dashboard") Back to Products List

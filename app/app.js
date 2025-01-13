@@ -70,6 +70,24 @@ app.get('/logout',(req,res) => {
 app.get("/createproduct", function(req, res) {
     res.render("createproducts");
 });
+app.get("/product/edit/:id", async function (req, res) {
+    const productId = req.params.id;
+
+    const sql = 'SELECT * FROM products WHERE product_id = ?';
+    try {
+        const product = await db.query(sql, [productId]);
+        if (product.length > 0) {
+            // Render the updateproducts template with the product data
+            res.render("updateproducts", { product: product[0] });
+        } else {
+            res.status(404).send("Product not found");
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
 // Task 2 display a formatted list of products
 app.get("/products", function(req, res) {
     var sql = 'select * from products';
@@ -220,6 +238,27 @@ app.get('/logout', function (req, res) {
     req.session.destroy();
     res.redirect('/login');
 });
+
+app.post('/update-product/:id', async (req, res) => {
+    const productId = req.params.id;
+    const { product_name, category, original_price, discount_price, expiration_date, quantity, retailer_id } = req.body;
+
+    try {
+        const sql = 'UPDATE products SET product_name = ?, category = ?, original_price = ?, discount_price = ?, expiration_date = ?, quantity = ?, retailer_id = ? WHERE product_id = ?';
+        const values = [product_name, category, original_price, discount_price, expiration_date, quantity, retailer_id, productId];
+        
+        const result = await db.query(sql, values);
+        if (result.affectedRows > 0) {
+            res.render('product-success', { message: 'Product updated successfully' });
+        } else {
+            res.render('error', { error: 'Product not found' });
+        }
+    } catch (error) {
+        console.error('Error updating product:', error.message);
+        res.render('error', { error: 'Failed to update product' });
+    }
+});
+
 
 
 // Create a dynamic route for /hello/<name>, where name is any value provided by user
