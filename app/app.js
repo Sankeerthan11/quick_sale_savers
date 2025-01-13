@@ -259,7 +259,23 @@ app.post('/update-product/:id', async (req, res) => {
     }
 });
 
+app.delete('/products/:id', async (req, res) => {
+    const productId = req.params.id;
 
+    try {
+        const sql = 'DELETE FROM products WHERE product_id = ?';
+        const result = await db.query(sql, [productId]);
+        
+        if (result.affectedRows > 0) {
+            res.render('product-success', { message: 'Product deleted successfully' });
+        } else {
+            res.render('error', { error: 'Product not found' });
+        }
+    } catch (error) {
+        console.error('Error deleting product:', error.message);
+        res.render('error', { error: 'Failed to delete product' });
+    }
+});
 
 // Create a dynamic route for /hello/<name>, where name is any value provided by user
 // At the end of the URL
