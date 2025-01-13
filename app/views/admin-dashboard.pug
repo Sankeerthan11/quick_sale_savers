@@ -35,13 +35,16 @@ html
                             td
                                 // Action Buttons
                                 a.button(href=`/product/edit/${product.product_id}`) Edit
-                                a.button(href=`/product/delete/${product.product_id}` style="background-color: red; color: white;") Delete
+                                a.button.delete-button(href=`/product/delete/${product.product_id}` style="background-color: red; color: white;") Delete
 
         script.
-            // Clickable row for product details
-            document.querySelectorAll(".product-row").forEach(row => {
-                row.addEventListener("click", () => {
-                    const productId = row.getAttribute("data-id");
-                    window.location.href = `/product/${productId}`;
+            // Add a confirmation alert for delete actions
+            document.querySelectorAll(".delete-button").forEach(button => {
+                button.addEventListener("click", (event) => {
+                    const confirmDelete = confirm("Are you sure you want to delete this product?");
+                    if (!confirmDelete) {
+                        // Prevent navigation if user cancels
+                        event.preventDefault();
+                    }
                 });
             });

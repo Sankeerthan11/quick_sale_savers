@@ -259,7 +259,7 @@ app.post('/update-product/:id', async (req, res) => {
     }
 });
 
-app.delete('/products/:id', async (req, res) => {
+app.get('/product/delete/:id', async (req, res) => {
     const productId = req.params.id;
 
     try {
