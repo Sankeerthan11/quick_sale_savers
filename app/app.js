@@ -288,6 +288,26 @@ app.get("/hello/:name", function(req, res) {
     res.send("Hello " + req.params.name);
 });
 
+
+// Contact Us POST API
+app.post('/contact', async (req, res) => {
+    const { name, email, message } = req.body;
+
+    try {
+        // Save the message to the database (example schema: contact_messages table)
+        const sql = 'INSERT INTO contact_messages (name, email, message) VALUES (?, ?, ?)';
+        const values = [name, email, message];
+
+        await db.query(sql, values);
+
+        // Render a success page or send a success message
+        res.render('contact-success', { message: 'Thank you for reaching out. We will get back to you shortly.' });
+    } catch (error) {
+        console.error('Error handling contact form submission:', error.message);
+        res.render('contact-error', { error: 'Failed to send your message. Please try again later.' });
+    }
+});
+
 // Start server on port 3000
 app.listen(3000,function(){
     console.log(`Server running at http://127.0.0.1:3000/`);
