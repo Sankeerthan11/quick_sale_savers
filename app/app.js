@@ -307,6 +307,17 @@ app.post('/contact', async (req, res) => {
         res.render('contact-error', { error: 'Failed to send your message. Please try again later.' });
     }
 });
+app.get('/contactus', async (req, res) => {
+    const sql = 'SELECT * FROM contact_messages ORDER BY created_at DESC';
+    try {
+        const contacts = await db.query(sql);
+        res.render('contacts', { contacts });
+    } catch (error) {
+        console.error('Error fetching contact messages:', error.message);
+        res.render('error', { error: 'Failed to fetch contact messages' });
+    }
+});
+
 
 // Start server on port 3000
 app.listen(3000,function(){
